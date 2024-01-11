@@ -55,6 +55,7 @@ export const authOptions = {
           user.name = userData.username;
           user.email = credentials.email;
           user.image = userData.picture;
+          user.role = userData.role;
 
           return user;
         }
@@ -65,9 +66,9 @@ export const authOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account, profile, isNewUser }) {
-      //  console.log('--------JWT USER-------: ', user)
-      // console.log('--------JWT TOKEN-------: ', token)
-
+      console.log("--------JWT USER-------: ", user);
+      console.log("--------JWT TOKEN-------: ", token);
+      console.log("el rol", user?.role);
       if (account && account.provider === "google") {
         token.id_token = account.id_token;
         try {
@@ -124,6 +125,7 @@ export const authOptions = {
       // Asignamos los tokens si están disponibles en el objeto user
       if (user && user.access) {
         token.access = user.access;
+        token.role = user.role;
       }
       if (user && user.refresh) {
         token.refresh = user.refresh;
@@ -131,9 +133,14 @@ export const authOptions = {
       return token;
     },
     async session({ session, user, token }) {
+      console.log("--------SESSION USER-------: ", user);
+      console.log("--------SESSION TOKEN-------: ", token);
+      console.log("-------- SESSION SESSION -------: ", session);
+
       if (token && token.tokens?.access) {
         session.user.access = token.tokens.access;
         session.user.refresh = token.tokens.refresh;
+        session.user.role = user.role;
       }
       // Agregamos los tokens a la sesión si están disponibles
       if (token && token.access) {

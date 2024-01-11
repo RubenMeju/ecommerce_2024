@@ -39,7 +39,9 @@ AUTH_PROVIDERS = {'google': 'google', 'email': 'email'}
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     roles = (
         ("customer", "Customer"),
+        ("seller", "Seller"),
         ("admin", "Admin"),
+
     )
 
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
@@ -70,7 +72,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     objects = UserAccountManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS = ["username", "role"]
 
     def __str__(self):
         return self.email

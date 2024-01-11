@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-du(7gb2v-7xe^21pc7h%ff9y1sqvfq-9(czrl#5qv%wua7v7m-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -201,4 +201,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
+    "http://localhost:3000",
 ]
