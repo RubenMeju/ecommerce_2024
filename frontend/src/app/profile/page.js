@@ -6,9 +6,21 @@ export default function page() {
   console.log(session);
   return (
     <div>
-      profile
-      <p>{session?.user?.name}</p>
-      <p>{session?.user?.email}</p>
+      <div>
+        <span className=" font-bold">Nombre: </span>
+
+        <span>{session?.user?.name}</span>
+      </div>
+      <div>
+        <span className=" font-bold">Email: </span>
+
+        <span>{session?.user?.email}</span>
+      </div>
+      <div>
+        <span className=" font-bold">Tipo de cuenta: </span>
+
+        <span>{session?.user?.role === "seller" ? "Vendedor" : "Cliente"}</span>
+      </div>
     </div>
   );
 }

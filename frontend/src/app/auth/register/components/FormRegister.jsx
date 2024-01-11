@@ -12,7 +12,7 @@ export default function FormRegister() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repassword, setRePassword] = useState("");
-  const [role, setRole] = useState("Customer");
+  const [role, setRole] = useState("customer");
 
   const router = useRouter();
 

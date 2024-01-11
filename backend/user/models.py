@@ -48,7 +48,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=100, unique=False)
     picture = models.ImageField(
-        default="media/users/user_default_profile.png",
+        default="media/users/pictures/user_default.jpg",
         upload_to="media/users/pictures/",
         blank=True,
         null=True,

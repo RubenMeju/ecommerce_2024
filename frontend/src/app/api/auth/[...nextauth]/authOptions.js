@@ -66,98 +66,27 @@ export const authOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account, profile, isNewUser }) {
-      console.log("--------JWT USER-------: ", user);
-      console.log("--------JWT TOKEN-------: ", token);
-      console.log("el rol", user?.role);
-      if (account && account.provider === "google") {
-        token.id_token = account.id_token;
-        try {
-          const response = await fetch(
-            "http://127.0.0.1:8000/social_auth/google/",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ auth_token: token.id_token }),
-            }
-          );
-          if (response.ok) {
-            const token = await response.json();
-            return token;
+      console.log("JWT, token: ", token);
+      console.log("JWT, user: ", user);
+      console.log("JWT, account: ", account);
 
-            // Si la autenticación fue exitosa en el servidor, retornar el token
-          } else {
-            // Si la autenticación falló, retornar null para evitar la creación de la sesión
-            console.error("Request failed:", response.statusText);
-            return null;
-          }
-        } catch (error) {
-          console.error("Error:", error);
+      if (account && account.provider === "credentials") {
+        if (user && user.access) {
+          token.access = user.access;
+          token.role = user.role;
         }
-
-        try {
-          const response = await fetch("http://127.0.0.1:8000/auth/users/me/", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "JWT " + token.id_token,
-            },
-          });
-
-          if (response.ok) {
-            const user = await response.json();
-            if (user.is_active === true) {
-              // Asignamos los tokens si están disponibles en el objeto user
-              if (user && user.id_token) {
-                token.access = user.id_token;
-              }
-              return token;
-            }
-          } else {
-            // Si la autenticación falló, retornar null para evitar la creación de la sesión
-            console.error("Request failed:", response.statusText);
-          }
-        } catch (error) {
-          console.error("Error:", error);
-        }
-      }
-      // Asignamos los tokens si están disponibles en el objeto user
-      if (user && user.access) {
-        token.access = user.access;
-        token.role = user.role;
-      }
-      if (user && user.refresh) {
-        token.refresh = user.refresh;
       }
       return token;
     },
     async session({ session, user, token }) {
-      console.log("--------SESSION USER-------: ", user);
-      console.log("--------SESSION TOKEN-------: ", token);
-      console.log("-------- SESSION SESSION -------: ", session);
-
-      if (token && token.tokens?.access) {
-        session.user.access = token.tokens.access;
-        session.user.refresh = token.tokens.refresh;
-        session.user.role = user.role;
-      }
-      // Agregamos los tokens a la sesión si están disponibles
-      if (token && token.access) {
-        session.user.id = token.sub;
+      console.log("SESSION, session: ", session);
+      console.log("SESSION, user: ", user);
+      console.log("SESSION, token: ", token);
+      if (token && token?.access) {
         session.user.access = token.access;
-      }
-      if (token && token.refresh) {
         session.user.refresh = token.refresh;
+        session.user.role = token.role;
       }
-
-      // Si no hay token, borramos la sesión
-      if (!token) {
-        return null;
-      }
-      //  console.log('--------------SESSION USER-----------: ', user)
-      //   console.log('--------------SESSION TOKEN-----------n: ', token)
-
       return session;
     },
   },
