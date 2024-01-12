@@ -72,6 +72,7 @@ export const authOptions = {
 
       if (account && account.provider === "credentials") {
         if (user && user.access) {
+          token.id = user.id;
           token.access = user.access;
           token.role = user.role;
         }
@@ -83,6 +84,7 @@ export const authOptions = {
       console.log("SESSION, user: ", user);
       console.log("SESSION, token: ", token);
       if (token && token?.access) {
+        session.user.id = token.id;
         session.user.access = token.access;
         session.user.refresh = token.refresh;
         session.user.role = token.role;
